@@ -58,3 +58,6 @@ sysinfo.txt
 *.aab
 *.unitypackage
 *.app
+
+# Mac
+*.DS_Store
