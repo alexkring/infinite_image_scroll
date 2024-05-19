@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 // Used to initialize the application with the correct state, and to handle any unity event lifecycle management to communicate with other code components.
 public class ImageScrollApplication : MonoBehaviour
@@ -46,6 +47,14 @@ public class ImageScrollApplication : MonoBehaviour
                 Debug.LogError("Failed to load textures");
             } else {
                 Debug.Log($"Successfully retrieved {loadedTextureResults.Count} textures");
+                Assert.IsTrue(loadedTextureResults.Count == fetchedResult.Count);
+                for(int i = 0; i < loadedTextureResults.Count; i++) {
+                    if (loadedTextureResults[i] == null) {
+                        Debug.Log($"Failed to load texture for url={fetchedResult[i].Url}");
+                    } else {
+                        Debug.Log($"successfully loaded texture for url={fetchedResult[i].Url}");
+                    }
+                }
             }
         }
     }
