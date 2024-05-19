@@ -33,10 +33,9 @@ public class ImageScrollApplication : MonoBehaviour
         Debug.Log("Fetching images");
 
         List<ImageModel> fetchedResult = null;
-        System.Action<List<ImageModel>> callback = (List<ImageModel> result) => {
+        yield return StartCoroutine(_imageApi.FetchImages(pageId, (List<ImageModel> result) => {
             fetchedResult = result;
-        };
-        yield return StartCoroutine(_imageApi.FetchImages(pageId, callback));
+        }));
 
         if ( fetchedResult == null ) {
              Debug.Log($"Failed to retrieve any image models");

@@ -23,6 +23,7 @@ public class ImageCache
     public void AddViewModel(string modelId, ImageViewModel viewModel) {
         if (_viewModels.ContainsKey(modelId)) {
             Debug.LogError($"Trying to add modelId={modelId} ViewModel to cache, but it already exists.");
+            return;
         }
         // TODO: eviction logic
         _viewModels[modelId] = viewModel;
@@ -32,6 +33,7 @@ public class ImageCache
     public void AddTexture(string modelId, Texture2D texture) {
         if (_textures.ContainsKey(modelId)) {
             Debug.LogError($"Trying to add modelId={modelId} texture to cache, but it already exists.");
+            return;
         }
         // TODO: eviction logic
         _textures[modelId] = texture;
