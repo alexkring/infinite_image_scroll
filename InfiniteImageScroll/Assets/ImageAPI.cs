@@ -25,4 +25,28 @@ public class ImageAPI : IImageAPI
         imageModelsFound.Add(model);
         return imageModelsFound;
     }
+
+    //private async Task<
+
+    /*
+    private async Task<ImageModel> LoadImage(string url) 
+    {
+        using( UnityWebRequest www = UnityWebRequest.Get(url) )
+        {
+            var asyncOp = www.SendWebRequest();
+            while( !asyncOp.isDone ) {
+                const int DelayInMilliseconds = 30;
+                await Task.Delay( DelayInMilliseconds );
+            }
+            if (www.result != UnityWebRequest.Result.Success) {
+                Debug.Log(www.error);
+                return null;
+            }
+            else {
+                Texture2D myTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+                return myTexture;
+            }
+        }
+    }
+    */
 }

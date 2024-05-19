@@ -7,18 +7,19 @@ using System.Collections.Generic;
 public class ImageModel : IImageModel
 {
     private string id;
+    private string name;
+    private string image_url;
+
     public string Id { 
         get { return id; }
         set { id = value ;}
     }
 
-    private string name;
     public string Name { 
         get { return name; }
         set { name = value; }
     }
 
-    private string image_url;
     public string Url { 
         get { return image_url; }
         set { image_url = value; }
