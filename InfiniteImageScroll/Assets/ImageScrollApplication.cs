@@ -37,6 +37,9 @@ public class ImageScrollApplication : MonoBehaviour
              Debug.Log($"Failed to retrieve any image models");
         } else {
              Debug.Log($"Successfully retrieved {fetchedResult.Count} image models");
+             foreach (ImageModel model in fetchedResult) {
+                Debug.Log($"model: {model.Id}, {model.Name}, {model.Url}");
+             }
         }
     }
 }
