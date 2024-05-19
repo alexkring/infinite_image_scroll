@@ -4,11 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class ImageModel : IImageModel
+public class ImageModel
 {
-    private string id;
-    private string name;
-    private string image_url;
+    public string id;
+    public string name;
+    public string image_url;
 
     public string Id { 
         get { return id; }

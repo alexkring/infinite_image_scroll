@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 // Used to initialize the application with the correct state, and to handle any unity event lifecycle management to communicate with other code components.

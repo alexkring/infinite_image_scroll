@@ -24,12 +24,10 @@ public class ImageAPI : MonoBehaviour, IImageAPI
                     Debug.LogError("Error: " + www.error);
                     callback(null);
                     yield break;
-                    break;
                 case UnityWebRequest.Result.ProtocolError:
                     Debug.LogError("HTTP Error: " + www.error);
                     callback(null);
                     yield break;
-                    break;
                 case UnityWebRequest.Result.Success:
                     Debug.Log("Received web request successfully");
                     break;

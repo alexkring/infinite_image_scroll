@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class PageModel : IPageModel
+public class PageModel
 {
-    private int count;
-    private string next;
-    private string previous;
-    private List<ImageModel> results;
+    public int count;
+    public string next;
+    public string previous;
+    public List<ImageModel> results;
 
     public int Count { 
         get { return count; }
