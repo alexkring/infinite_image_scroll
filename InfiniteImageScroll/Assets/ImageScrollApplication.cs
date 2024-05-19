@@ -6,12 +6,11 @@ using UnityEngine;
 // Used to initialize the application with the correct state, and to handle any unity event lifecycle management to communicate with other code components.
 public class ImageScrollApplication : MonoBehaviour
 {
+    public ImageAPI _imageApi;
     private ImageLoader _imageLoader;
-    private ImageAPI _imageApi;
 
     void Awake() {
         _imageLoader = new ImageLoader();
-        _imageApi = new ImageAPI();
     }
 
     // Start is called before the first frame update
@@ -29,14 +28,16 @@ public class ImageScrollApplication : MonoBehaviour
     IEnumerator FetchImageModels() {
         Debug.Log("Fetching images");
 
-        Task<List<ImageModel>> task = Task.Run(() =>_imageApi.FetchImages(1));
-        yield return new WaitUntil(() => task.IsCompleted);
-        
-        List<ImageModel> imageModels = task.Result;
-        if ( imageModels == null ) {
+        List<ImageModel> fetchedResult = null;
+        System.Action<List<ImageModel>> callback = (List<ImageModel> result) => {
+            fetchedResult = result;
+        };
+        yield return StartCoroutine(_imageApi.FetchImages(1, callback));
+
+        if ( fetchedResult == null ) {
              Debug.Log($"Failed to retrieve any image models");
         } else {
-             Debug.Log($"Successfully retrieved {imageModels.Count} image models");
+             Debug.Log($"Successfully retrieved {fetchedResult.Count} image models");
         }
     }
 }

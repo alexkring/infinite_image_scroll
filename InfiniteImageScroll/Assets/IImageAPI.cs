@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using UnityEngine;
 
 public interface IImageModel {
     string Id { get; }
@@ -13,5 +13,5 @@ public interface IImageModel {
 public interface IImageAPI {
 
     // Fetch limit# of image models 
-    Task<List<ImageModel>> FetchImages(int page);
+    IEnumerator FetchImages(int page, System.Action<List<ImageModel>> callback);
 }
