@@ -11,6 +11,10 @@ public class ImageViewModel
         get { return _model.Name; }
     }
 
+    public string Url {
+        get { return _model.Url; }
+    }
+
     public bool IsLoaded {
         get { return (_texture != null); }
     }

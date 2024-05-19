@@ -8,6 +8,7 @@ public class ImageScrollApplication : MonoBehaviour
 {
     public ImageAPI _imageApi;
     public ImageLoader _imageLoader;
+    public ScrollController _scrollController;
     private ImageCache _imageCache;
 
     void Awake() {
@@ -45,6 +46,16 @@ public class ImageScrollApplication : MonoBehaviour
                 Debug.Log($"model: {model.Id}, {model.Name}, {model.Url}");
              }
 
+             // Construct the view models and put them in the cache.
+            for (int i = 0; i < fetchedResult.Count; i++) {
+                ImageModel model = fetchedResult[i];
+                ImageViewModel viewModel = new ImageViewModel(model);
+                _imageCache.AddViewModel(model.Id, viewModel);
+            }
+
+            // Set data source on the ui controller
+             _scrollController.InitViewModels(_imageCache.ViewModels);
+
             List<Texture2D> loadedTextureResults = null;
             yield return StartCoroutine(_imageLoader.LoadImages(fetchedResult, (List<Texture2D> result) => {
                 loadedTextureResults = result;
@@ -66,13 +77,12 @@ public class ImageScrollApplication : MonoBehaviour
                 // construct the view models and put them and the textures in the cache.
                 for (int i = 0; i < fetchedResult.Count; i++) {
                     ImageModel model = fetchedResult[i];
-                    ImageViewModel viewModel = new ImageViewModel(model);
+                    ImageViewModel viewModel = _imageCache.GetViewModel(model.Id);
                     Texture2D texture = loadedTextureResults[i];
                     if (texture != null) {
                         viewModel.Load(texture);
                         _imageCache.AddTexture(model.Id, texture);
                     }
-                    _imageCache.AddViewModel(model.Id, viewModel);
                 }
             }
         }

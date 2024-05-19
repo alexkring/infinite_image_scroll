@@ -10,9 +10,16 @@ public class ImageCache
     private int _viewModelSize;
     private int _textureSize;
 
-
     private Dictionary<string, ImageViewModel> _viewModels; // modelId to ImageViewModel mapping
     private Dictionary<string, Texture2D> _textures; // modelId to texture mapping
+
+    public Dictionary<string, ImageViewModel> ViewModels {
+        get { return _viewModels; }
+    }
+
+    public Dictionary<string, Texture2D> Textures {
+        get { return _textures; }
+    }
 
     public ImageCache(int viewModelSize = 5, int textureSize = 5) {
         _viewModelSize = viewModelSize;
@@ -38,5 +45,13 @@ public class ImageCache
         // TODO: eviction logic
         _textures[modelId] = texture;
         Debug.Log($"Added Id={modelId} texture to cache");
+    }
+
+    public ImageViewModel GetViewModel(string modelId) {
+        return _viewModels[modelId];
+    }
+
+    public Texture2D GetTexture(string modelId) {
+        return _textures[modelId];
     }
 }
