@@ -21,14 +21,18 @@ public class ImageScrollApplication : MonoBehaviour
         // For now, we are just going to request all 5 pages of images since we know there are 5.
         const int kStartPage = 1;
         const int kNumPages = 4;
-        StartCoroutine(FetchMultiplePageOfImageModels(kStartPage, kNumPages));
+        StartCoroutine(FetchMultiplePageOfImageModels(kStartPage, kNumPages, (bool result) => {
+            // Set data source on the ui controller
+            _scrollController.InitViewModels(_imageCache.ViewModels);
+        }));
     }
 
-    IEnumerator FetchMultiplePageOfImageModels(int startPage, int numPages) {
+    IEnumerator FetchMultiplePageOfImageModels(int startPage, int numPages, System.Action<bool> callback) {
         int end = startPage + numPages;
         for (int page = startPage; page < end; page++) {
              yield return StartCoroutine(FetchPageOfImageModels(page));
         }
+        callback(true);
     }
 
     IEnumerator FetchPageOfImageModels(int pageId) {
@@ -54,8 +58,8 @@ public class ImageScrollApplication : MonoBehaviour
                 _imageCache.AddViewModel(model.Id, viewModel);
             }
 
-            // Set data source on the ui controller
-             _scrollController.InitViewModels(_imageCache.ViewModels);
+            // Note: we could call _scrollController.InitViewModels(_imageCache.ViewModels) here, if we want the UI models to update with each page. But it looks cleaner
+            // If we do it after a batch of requests.
 
             List<Texture2D> loadedTextureResults = null;
             yield return StartCoroutine(_imageLoader.LoadImages(fetchedResult, (List<Texture2D> result) => {

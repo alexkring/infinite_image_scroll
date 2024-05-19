@@ -3,12 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IImageModel {
-    string Id { get; }
-    string Name { get; }
-    string Url { get; }
-}
-
 // API Requirements: a mocked API endpoint delivering paginated data, including an 'id', 'name', and 'image url' for each item.
 public interface IImageAPI {
 
