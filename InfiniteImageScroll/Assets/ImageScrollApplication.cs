@@ -17,7 +17,7 @@ public class ImageScrollApplication : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(FetchImages());
+        StartCoroutine(FetchImageModels());
     }
 
     // Update is called once per frame
@@ -26,10 +26,15 @@ public class ImageScrollApplication : MonoBehaviour
         
     }
 
-    IEnumerator FetchImages() {
+    IEnumerator FetchImageModels() {
         Debug.Log("Fetching images");
-        Task<List<IImageModel>> task = _imageApi.FetchImages(0);
+        Task<List<ImageModel>> task = _imageApi.FetchImages(1);
         yield return new WaitUntil(() => task.IsCompleted);
-        List<IImageModel> imageModels = task.Result;
+        List<ImageModel> imageModels = task.Result;
+        if ( imageModels == null ) {
+             Debug.Log($"Failed to retrieve any image models");
+        } else {
+             Debug.Log($"Successfully retrieved {imageModels.Count} image models");
+        }
     }
 }
