@@ -15,8 +15,9 @@ public class ImageAPI : IImageAPI
     }
     
     // Fetch limit# of image models 
-    public async Task<List<IImageModel>> FetchImages(int offset, int limit) {
-        List<IImageModel> imageModelsFound = new List<IImageModel>(limit);
+    public async Task<List<IImageModel>> FetchImages(int page) {
+
+        List<IImageModel> imageModelsFound = new List<IImageModel>();
         ImageModel model = new ImageModel();
         model.Name = "";
         model.Id = "";

@@ -1,23 +1,26 @@
+using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
+[System.Serializable]
 public class ImageModel : IImageModel
 {
-    private string _id;
+    private string id;
     public string Id { 
-        get { return _id; }
-        set { _id = value ;}
+        get { return id; }
+        set { id = value ;}
     }
 
-    private string _name;
+    private string name;
     public string Name { 
-        get { return _name; }
-        set { _name = value; }
+        get { return name; }
+        set { name = value; }
     }
 
-    private string _url;
+    private string image_url;
     public string Url { 
-        get { return _url; }
-        set { _name = value; }
+        get { return image_url; }
+        set { image_url = value; }
     }
 }

@@ -13,7 +13,9 @@ public class MockImageAPI : IImageAPI
     }
     
     // Fetch limit# of image models 
-    public async Task<List<IImageModel>> FetchImages(int offset, int limit) {
+    public async Task<List<IImageModel>> FetchImages(int page) {
+        return null;
+        /*
         if (offset + limit > _imageModelList.Count) {
             Debug.LogError($"could not fetch images because you are trying to fetch beyond the bounds of the images in the mock repo");
             return null;
@@ -24,5 +26,6 @@ public class MockImageAPI : IImageAPI
             imageModelsFound.Add(model);
         }
         return imageModelsFound;
+        */
     }
 }

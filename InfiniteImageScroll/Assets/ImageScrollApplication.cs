@@ -27,7 +27,8 @@ public class ImageScrollApplication : MonoBehaviour
     }
 
     IEnumerator FetchImages() {
-        Task<List<IImageModel>> task = _imageApi.FetchImages(0, 5);
+        Debug.Log("Fetching images");
+        Task<List<IImageModel>> task = _imageApi.FetchImages(0);
         yield return new WaitUntil(() => task.IsCompleted);
         List<IImageModel> imageModels = task.Result;
     }

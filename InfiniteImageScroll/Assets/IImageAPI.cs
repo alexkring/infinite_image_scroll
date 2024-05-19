@@ -13,5 +13,5 @@ public interface IImageModel {
 public interface IImageAPI {
 
     // Fetch limit# of image models 
-    Task<List<IImageModel>> FetchImages(int offset, int limit);
+    Task<List<IImageModel>> FetchImages(int page);
 }
