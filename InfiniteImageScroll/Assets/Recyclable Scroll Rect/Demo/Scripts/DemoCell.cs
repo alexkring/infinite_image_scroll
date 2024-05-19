@@ -32,6 +32,8 @@ public class DemoCell : MonoBehaviour, ICell
         nameLabel.text = contactInfo.Name;
         genderLabel.text = contactInfo.Gender;
         idLabel.text = contactInfo.id;
+
+        Debug.Log($"Configuring Cell=> Index : {_cellIndex}, Name : {_contactInfo.Name}, Gender {_contactInfo.Gender}");
     }
 
     
