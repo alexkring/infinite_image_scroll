@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +28,14 @@ public class ImageScrollApplication : MonoBehaviour
             foreach (ImageViewModel model in _imageCache.ViewModels.Values) {
                 scrollableList.Add(model);
             }
+            scrollableList.Sort( delegate (ImageViewModel x, ImageViewModel y) { 
+                    int xId = 0;
+                    int yId = 0;
+                    Int32.TryParse(x.Id, out xId);
+                    Int32.TryParse(y.Id, out yId);
+                    return (xId.CompareTo(yId)); 
+                } 
+            );
             _scrollController.InitViewModels(scrollableList);
         }));
     }
