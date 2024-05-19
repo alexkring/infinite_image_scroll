@@ -17,14 +17,16 @@ public class ImageScrollApplication : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        const int kPageToRequest = 1;
-        StartCoroutine(FetchPageOfImageModels(kPageToRequest));
+        const int kStartPage = 1;
+        const int kNumPages = 4;
+        StartCoroutine(FetchMultiplePageOfImageModels(kStartPage, kNumPages));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    IEnumerator FetchMultiplePageOfImageModels(int startPage, int numPages) {
+        int end = startPage + numPages;
+        for (int page = startPage; page < end; page++) {
+             yield return StartCoroutine(FetchPageOfImageModels(page));
+        }
     }
 
     IEnumerator FetchPageOfImageModels(int pageId) {
@@ -62,8 +64,7 @@ public class ImageScrollApplication : MonoBehaviour
                     }
                 }
                 
-                // construct the view models and put them in the cache.
-                List<ImageViewModel> viewModels = new List<ImageViewModel>();
+                // construct the view models and put them and the textures in the cache.
                 for (int i = 0; i < fetchedResult.Count; i++) {
                     ImageModel model = fetchedResult[i];
                     ImageViewModel viewModel = new ImageViewModel(model);
@@ -72,9 +73,8 @@ public class ImageScrollApplication : MonoBehaviour
                         viewModel.Load(texture);
                         _imageCache.AddTexture(model.Id, texture);
                     }
-                    viewModels.Add(viewModel);
+                    _imageCache.AddViewModel(model.Id, viewModel);
                 }
-                _imageCache.AddViewModels(viewModels);
             }
         }
     }

@@ -11,26 +11,30 @@ public class ImageCache
     private int _textureSize;
 
 
-    private List<ImageViewModel> _viewModels;
+    private Dictionary<string, ImageViewModel> _viewModels; // modelId to ImageViewModel mapping
     private Dictionary<string, Texture2D> _textures; // modelId to texture mapping
 
     public ImageCache(int viewModelSize = 5, int textureSize = 5) {
         _viewModelSize = viewModelSize;
-        _viewModels = new List<ImageViewModel>();
+        _viewModels = new Dictionary<string, ImageViewModel>();
         _textures = new Dictionary<string, Texture2D>();
     }
 
-    public void AddViewModels(List<ImageViewModel> viewModels) {
-        if (viewModels.Count > _viewModelSize) {
-            Debug.LogError("Could not add view models because too many ar being added");
-            return;
+    public void AddViewModel(string modelId, ImageViewModel viewModel) {
+        if (_viewModels.ContainsKey(modelId)) {
+            Debug.LogError($"Trying to add modelId={modelId} ViewModel to cache, but it already exists.");
         }
         // TODO: eviction logic
-        _viewModels.AddRange(viewModels);
+        _viewModels[modelId] = viewModel;
+        Debug.Log($"Added Id={modelId} ViewModel to cache");
     }
 
     public void AddTexture(string modelId, Texture2D texture) {
-         // TODO: eviction logic
+        if (_textures.ContainsKey(modelId)) {
+            Debug.LogError($"Trying to add modelId={modelId} texture to cache, but it already exists.");
+        }
+        // TODO: eviction logic
         _textures[modelId] = texture;
+        Debug.Log($"Added Id={modelId} texture to cache");
     }
 }
