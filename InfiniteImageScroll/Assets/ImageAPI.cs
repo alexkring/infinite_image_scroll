@@ -21,11 +21,8 @@ public class ImageAPI : MonoBehaviour, IImageAPI
             {
                 case UnityWebRequest.Result.ConnectionError:
                 case UnityWebRequest.Result.DataProcessingError:
-                    Debug.LogError("Error: " + www.error);
-                    callback(null);
-                    yield break;
                 case UnityWebRequest.Result.ProtocolError:
-                    Debug.LogError("HTTP Error: " + www.error);
+                    Debug.LogError($"HTTP Error: url={url}, error={www.error}");
                     callback(null);
                     yield break;
                 case UnityWebRequest.Result.Success:

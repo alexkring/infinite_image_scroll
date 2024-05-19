@@ -5,37 +5,39 @@ using UnityEngine.Networking;
 using System.Threading.Tasks;
 
 // Loads remote web images into 2d textures in memory.
-public class ImageLoader
+public class ImageLoader : MonoBehaviour
 {
-    public async Task<List<Texture2D>> LoadNextPage(List<string> urlList)
+    public IEnumerator LoadImages(List<ImageModel> modelList, System.Action<List<Texture2D>> callback)
     {
-        Debug.Log("Loading next page of textures");
-
         List<Texture2D> texturesLoaded = new List<Texture2D>();
-        foreach (string url in urlList) {
-            Texture2D texture = await LoadTexture(url);
-            texturesLoaded.Add(texture);
+        foreach (ImageModel model in modelList) {
+            yield return StartCoroutine(LoadTexture(model.Url, (Texture2D result) => {
+                texturesLoaded.Add(result);
+            }));
         }
-        return texturesLoaded;
+        callback(texturesLoaded);
     }
 
-    private async Task<Texture2D> LoadTexture(string url) 
+    private IEnumerator LoadTexture(string url, System.Action<Texture2D> callback) 
     {
         using( UnityWebRequest www = UnityWebRequestTexture.GetTexture(url) )
         {
-            var asyncOp = www.SendWebRequest();
-            while( !asyncOp.isDone ) {
-                const int DelayInMilliseconds = 30;
-                await Task.Delay( DelayInMilliseconds );
+            yield return www.SendWebRequest();
+            switch (www.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError($"HTTP Error: url={url}, error={www.error}");
+                    callback(null);
+                    yield break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log($"Received web request successfullyc for url={url}");
+                    break;
             }
-            if (www.result != UnityWebRequest.Result.Success) {
-                Debug.Log(www.error);
-                return null;
-            }
-            else {
-                Texture2D myTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
-                return myTexture;
-            }
+
+            Texture2D result = ((DownloadHandlerTexture)www.downloadHandler).texture;
+            callback(result);
         }
     }
 }

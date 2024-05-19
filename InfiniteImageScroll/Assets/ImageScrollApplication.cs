@@ -6,11 +6,7 @@ using UnityEngine;
 public class ImageScrollApplication : MonoBehaviour
 {
     public ImageAPI _imageApi;
-    private ImageLoader _imageLoader;
-
-    void Awake() {
-        _imageLoader = new ImageLoader();
-    }
+    public ImageLoader _imageLoader;
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +36,17 @@ public class ImageScrollApplication : MonoBehaviour
              foreach (ImageModel model in fetchedResult) {
                 Debug.Log($"model: {model.Id}, {model.Name}, {model.Url}");
              }
+
+            List<Texture2D> loadedTextureResults = null;
+            yield return StartCoroutine(_imageLoader.LoadImages(fetchedResult, (List<Texture2D> result) => {
+                loadedTextureResults = result;
+            }));
+
+            if (loadedTextureResults == null) {
+                Debug.LogError("Failed to load textures");
+            } else {
+                Debug.Log($"Successfully retrieved {loadedTextureResults.Count} textures");
+            }
         }
     }
 }
