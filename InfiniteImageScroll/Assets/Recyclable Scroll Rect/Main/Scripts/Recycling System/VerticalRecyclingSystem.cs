@@ -133,7 +133,9 @@ namespace PolyAndCode.UI
 
             //Get the required pool coverage and mininum size for the Cell pool
             float requriedCoverage = MinPoolCoverage * Viewport.rect.height;
-            int minPoolSize = Math.Min(MinPoolSize, DataSource.GetItemCount());
+            int minPoolSize = Math.Max(MinPoolSize, DataSource.GetItemCount());
+
+            Debug.Log($"Creating vertical recycling pool with minPoolSize={minPoolSize}");
 
             //create cells untill the Pool area is covered and pool size is the minimum required
             while ((poolSize < minPoolSize || currentPoolCoverage < requriedCoverage) && poolSize < DataSource.GetItemCount())

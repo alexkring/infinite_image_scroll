@@ -20,10 +20,14 @@ public class ImageScrollApplication : MonoBehaviour
         // Note: we could be more intelligent about requesting these fetches when the user is toward the end of a scroll.
         // For now, we are just going to request all 5 pages of images since we know there are 5.
         const int kStartPage = 1;
-        const int kNumPages = 4;
+        const int kNumPages = 5;
         StartCoroutine(FetchMultiplePageOfImageModels(kStartPage, kNumPages, (bool result) => {
             // Set data source on the ui controller
-            _scrollController.InitViewModels(_imageCache.ViewModels);
+            List<ImageViewModel> scrollableList = new List<ImageViewModel>();
+            foreach (ImageViewModel model in _imageCache.ViewModels.Values) {
+                scrollableList.Add(model);
+            }
+            _scrollController.InitViewModels(scrollableList);
         }));
     }
 
@@ -31,12 +35,14 @@ public class ImageScrollApplication : MonoBehaviour
         int end = startPage + numPages;
         for (int page = startPage; page < end; page++) {
              yield return StartCoroutine(FetchPageOfImageModels(page));
+             // Note: we could call _scrollController.InitViewModels(_imageCache.ViewModels) here, if we want the UI models to update with each page. But it looks cleaner
+            // If we do it after a batch of requests.
         }
         callback(true);
     }
 
     IEnumerator FetchPageOfImageModels(int pageId) {
-        Debug.Log("Fetching images");
+        Debug.Log($"Fetching page {pageId} ImageModels");
 
         List<ImageModel> fetchedResult = null;
         yield return StartCoroutine(_imageApi.FetchImages(pageId, (List<ImageModel> result) => {
@@ -58,9 +64,6 @@ public class ImageScrollApplication : MonoBehaviour
                 _imageCache.AddViewModel(model.Id, viewModel);
             }
 
-            // Note: we could call _scrollController.InitViewModels(_imageCache.ViewModels) here, if we want the UI models to update with each page. But it looks cleaner
-            // If we do it after a batch of requests.
-
             List<Texture2D> loadedTextureResults = null;
             yield return StartCoroutine(_imageLoader.LoadImages(fetchedResult, (List<Texture2D> result) => {
                 loadedTextureResults = result;
@@ -79,7 +82,7 @@ public class ImageScrollApplication : MonoBehaviour
                     }
                 }
                 
-                // construct the view models and put them and the textures in the cache.
+                // Construct the view models and put them and the textures in the cache.
                 for (int i = 0; i < fetchedResult.Count; i++) {
                     ImageModel model = fetchedResult[i];
                     ImageViewModel viewModel = _imageCache.GetViewModel(model.Id);

@@ -9,19 +9,19 @@ public class ScrollController : MonoBehaviour, IRecyclableScrollRectDataSource
     RecyclableScrollRect _recyclableScrollRect;
 
     // data list
-    private Dictionary<string, ImageViewModel> _viewModels;
+    private List<ImageViewModel> _viewModels;
 
     // Recyclable scroll rect's data source must be assigned in Awake.
     private void Awake()
     {
-        _viewModels = new Dictionary<string, ImageViewModel>();
-       // _recyclableScrollRect.DataSource = this;
+        _viewModels = new List<ImageViewModel>();
     }
 
     // Initializing view models
-    public void InitViewModels(Dictionary<string, ImageViewModel> viewModels) 
+    public void InitViewModels(List<ImageViewModel> viewModels) 
     {
         _viewModels = viewModels;
+        Debug.Log($"InitViewModels called with {viewModels.Count} models");
         _recyclableScrollRect.Initialize(this);
     }
 
@@ -32,6 +32,7 @@ public class ScrollController : MonoBehaviour, IRecyclableScrollRectDataSource
     /// </summary>
     public int GetItemCount()
     {
+        Debug.Log($"GetItemCount called with {_viewModels.Count} models");
         return _viewModels.Count;
     }
 
@@ -41,15 +42,15 @@ public class ScrollController : MonoBehaviour, IRecyclableScrollRectDataSource
     /// </summary>
     public void SetCell(ICell cell, int index)
     {
-        // Casting to the implemented Cell
-        var item = cell as ImageCell;
-        string modelId = index.ToString();
-        if (!_viewModels.ContainsKey(modelId)) {
-            Debug.LogError($"Calling Setcell on a viewModelId={modelId}, which does not exist yet.");
+        if (index >= _viewModels.Count) {
+            Debug.LogError($"Calling Setcell on a indexId={index}, which does not exist yet.");
             return;
         }
-        ImageViewModel viewModel = _viewModels[modelId];
-        item.ConfigureCell(viewModel, modelId);
+
+        // Casting to the implemented Cell
+        var item = cell as ImageCell;
+        ImageViewModel viewModel = _viewModels[index];
+        item.ConfigureCell(viewModel, viewModel.Id);
     }
 
     #endregion
