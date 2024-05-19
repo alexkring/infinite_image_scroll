@@ -6,9 +6,12 @@ using UnityEngine;
 public class ImageScrollApplication : MonoBehaviour
 {
     private ImageLoader _imageLoader;
+    private MockImageAPI _imageApi;
 
     void Awake() {
+        const string ImageApiFilePath = "file.json";
         _imageLoader = new ImageLoader();
+        _imageApi = new MockImageAPI(ImageApiFilePath);
     }
 
     // Start is called before the first frame update
