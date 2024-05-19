@@ -8,11 +8,17 @@ public class ImageScrollApplication : MonoBehaviour
 {
     public ImageAPI _imageApi;
     public ImageLoader _imageLoader;
+    private ImageCache _imageCache;
+
+    void Awake() {
+        _imageCache = new ImageCache();
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(FetchImageModels());
+        const int kPageToRequest = 1;
+        StartCoroutine(FetchPageOfImageModels(kPageToRequest));
     }
 
     // Update is called once per frame
@@ -21,14 +27,14 @@ public class ImageScrollApplication : MonoBehaviour
         
     }
 
-    IEnumerator FetchImageModels() {
+    IEnumerator FetchPageOfImageModels(int pageId) {
         Debug.Log("Fetching images");
 
         List<ImageModel> fetchedResult = null;
         System.Action<List<ImageModel>> callback = (List<ImageModel> result) => {
             fetchedResult = result;
         };
-        yield return StartCoroutine(_imageApi.FetchImages(1, callback));
+        yield return StartCoroutine(_imageApi.FetchImages(pageId, callback));
 
         if ( fetchedResult == null ) {
              Debug.Log($"Failed to retrieve any image models");
@@ -55,6 +61,20 @@ public class ImageScrollApplication : MonoBehaviour
                         Debug.Log($"successfully loaded texture for url={fetchedResult[i].Url}");
                     }
                 }
+                
+                // construct the view models and put them in the cache.
+                List<ImageViewModel> viewModels = new List<ImageViewModel>();
+                for (int i = 0; i < fetchedResult.Count; i++) {
+                    ImageModel model = fetchedResult[i];
+                    ImageViewModel viewModel = new ImageViewModel(model);
+                    Texture2D texture = loadedTextureResults[i];
+                    if (texture != null) {
+                        viewModel.Load(texture);
+                        _imageCache.AddTexture(model.Id, texture);
+                    }
+                    viewModels.Add(viewModel);
+                }
+                _imageCache.AddViewModels(viewModels);
             }
         }
     }
