@@ -28,8 +28,10 @@ public class ImageScrollApplication : MonoBehaviour
 
     IEnumerator FetchImageModels() {
         Debug.Log("Fetching images");
-        Task<List<ImageModel>> task = _imageApi.FetchImages(1);
+
+        Task<List<ImageModel>> task = Task.Run(() =>_imageApi.FetchImages(1));
         yield return new WaitUntil(() => task.IsCompleted);
+        
         List<ImageModel> imageModels = task.Result;
         if ( imageModels == null ) {
              Debug.Log($"Failed to retrieve any image models");
