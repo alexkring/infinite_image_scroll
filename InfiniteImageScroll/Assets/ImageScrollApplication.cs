@@ -15,9 +15,10 @@ public class ImageScrollApplication : MonoBehaviour
         _imageCache = new ImageCache();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
+        // Note: we could be more intelligent about requesting these fetches when the user is toward the end of a scroll.
+        // For now, we are just going to request all 5 pages of images since we know there are 5.
         const int kStartPage = 1;
         const int kNumPages = 4;
         StartCoroutine(FetchMultiplePageOfImageModels(kStartPage, kNumPages));

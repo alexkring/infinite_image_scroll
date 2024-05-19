@@ -24,6 +24,15 @@ public class ImageCell : MonoBehaviour, ICell
         GetComponent<Button>().onClick.AddListener(ButtonListener);
     }
 
+    public void ClearCell() {
+        Debug.Log($"Clearing Cell=> modelId : {_modelId}");
+        _modelId = "";
+        _viewModel = null;
+        idLabel.text = "Id";
+        nameLabel.text = "Name";
+        urlLabel.text = "Url";
+    }
+
     // This is called from the SetCell method in DataSource
     public void ConfigureCell(ImageViewModel model, string modelId)
     {
