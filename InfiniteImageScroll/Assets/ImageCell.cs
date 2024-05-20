@@ -14,6 +14,7 @@ public class ImageCell : MonoBehaviour, ICell
     public Text nameLabel;
     public Text urlLabel;
     public Image image;
+    public GameObject LoadingState;
 
     // Model
     private ImageViewModel _viewModel;
@@ -56,10 +57,9 @@ public class ImageCell : MonoBehaviour, ICell
         
         // load / unload texture
         if (!_viewModel.IsLoaded) {
-            Debug.Log("starting to load 1");
             if (!_isLoading) {
                 _isLoading = true;
-                Debug.Log("starting to load 2");
+                LoadingState.SetActive(true);
                 StartCoroutine(LoadTexture());
             }
         } else {
@@ -68,9 +68,9 @@ public class ImageCell : MonoBehaviour, ICell
     }
 
     private IEnumerator LoadTexture() {
-        Debug.Log("starting to load 3");
         yield return StartCoroutine(_textureRequestHandler.LoadTexture(_viewModel.Id, _viewModel.Url, (Texture2D texture) => {
-            Debug.Log("starting to load 4");
+            _isLoading = false;
+            LoadingState.SetActive(false);
             if (texture != null) {
                 Debug.Log($"Successfully loaded texture for modelId={_viewModel.Id}, url={_viewModel.Url}");
                 _viewModel.Load(texture);
