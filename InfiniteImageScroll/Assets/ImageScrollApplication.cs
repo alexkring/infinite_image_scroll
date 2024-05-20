@@ -88,39 +88,6 @@ public class ImageScrollApplication : MonoBehaviour, ITextureRequestHandler
                 ImageViewModel viewModel = new ImageViewModel(model);
                 _imageCache.AddViewModel(model.Id, viewModel);
             }
-
-            // Load Textures
-            /*
-            List<Texture2D> loadedTextureResults = null;
-            yield return StartCoroutine(_imageLoader.LoadImages(fetchedResult, (List<Texture2D> result) => {
-                loadedTextureResults = result;
-            }));
-
-            if (loadedTextureResults == null) {
-                Debug.LogError("Failed to load textures");
-            } else {
-                Debug.Log($"Successfully retrieved {loadedTextureResults.Count} textures");
-                Assert.IsTrue(loadedTextureResults.Count == fetchedResult.Count);
-                for(int i = 0; i < loadedTextureResults.Count; i++) {
-                    if (loadedTextureResults[i] == null) {
-                        Debug.Log($"Failed to load texture for url={fetchedResult[i].Url}");
-                    } else {
-                        Debug.Log($"successfully loaded texture for url={fetchedResult[i].Url}");
-                    }
-                }
-                
-                // Construct the view models and put them and the textures in the cache.
-                for (int i = 0; i < fetchedResult.Count; i++) {
-                    ImageModel model = fetchedResult[i];
-                    ImageViewModel viewModel = _imageCache.GetViewModel(model.Id);
-                    Texture2D texture = loadedTextureResults[i];
-                    if (texture != null) {
-                        viewModel.Load(texture);
-                        _imageCache.AddTexture(model.Id, texture);
-                    }
-                }
-            }
-            */
         }
     }
 }
