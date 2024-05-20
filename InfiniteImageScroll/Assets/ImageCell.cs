@@ -75,6 +75,7 @@ public class ImageCell : MonoBehaviour, ICell
                 Debug.Log($"Successfully loaded texture for modelId={_viewModel.Id}, url={_viewModel.Url}");
                 _viewModel.Load(texture);
                 image.material.SetTexture("_MainTex", texture);
+                image.gameObject.SetActive(true);
             }
         }));
     }
