@@ -12,16 +12,13 @@ public class ImageModel
 
     public string Id { 
         get { return id; }
-        set { id = value ;}
     }
 
     public string Name { 
         get { return name; }
-        set { name = value; }
     }
 
     public string Url { 
         get { return image_url; }
-        set { image_url = value; }
     }
 }

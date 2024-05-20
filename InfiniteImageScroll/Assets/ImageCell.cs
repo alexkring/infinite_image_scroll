@@ -7,6 +7,8 @@ using PolyAndCode.UI;
 // Cell class that get events from the recyclable UI controller. A cell in Recyclable Scroll Rect must have a cell class inheriting from ICell.
 // The class is required to configure the cell(updating UI elements etc) according to the data during recycling of cells.
 // The configuration of a cell is done through the DataSource SetCellData method.
+// Honestly this class is very similar to the viewmodel, but it also has a monobehahvior. I would probably want to refactor and combine this with the 
+// ImageViewModel class since they are the same thing. But I wrote this code separately when testing the PolyAndCode.UI namespace ^_^
 public class ImageCell : MonoBehaviour, ICell
 {
     // UI
@@ -24,7 +26,6 @@ public class ImageCell : MonoBehaviour, ICell
 
     private void Start()
     {
-        // Can also be done in the inspector
         GetComponent<Button>().onClick.AddListener(ButtonListener);
     }
 

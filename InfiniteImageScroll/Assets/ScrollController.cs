@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PolyAndCode.UI;
 
+// Responsibile for binding ImageViewModels to the UI
 public class ScrollController : MonoBehaviour, IRecyclableScrollRectDataSource
 {
     [SerializeField]
