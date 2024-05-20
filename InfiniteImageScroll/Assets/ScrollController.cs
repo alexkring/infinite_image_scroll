@@ -10,6 +10,7 @@ public class ScrollController : MonoBehaviour, IRecyclableScrollRectDataSource
 
     // data list
     private List<ImageViewModel> _viewModels;
+    private ITextureRequestHandler _textureRequestHandler;
 
     // Recyclable scroll rect's data source must be assigned in Awake.
     private void Awake()
@@ -18,9 +19,10 @@ public class ScrollController : MonoBehaviour, IRecyclableScrollRectDataSource
     }
 
     // Initializing view models
-    public void InitViewModels(List<ImageViewModel> viewModels) 
+    public void InitViewModels(List<ImageViewModel> viewModels, ITextureRequestHandler textureRequestHandler) 
     {
         _viewModels = viewModels;
+        _textureRequestHandler = textureRequestHandler;
         Debug.Log($"InitViewModels called with {viewModels.Count} models");
         _recyclableScrollRect.Initialize(this);
     }
@@ -50,7 +52,7 @@ public class ScrollController : MonoBehaviour, IRecyclableScrollRectDataSource
         // Casting to the implemented Cell
         var item = cell as ImageCell;
         ImageViewModel viewModel = _viewModels[index];
-        item.ConfigureCell(viewModel, viewModel.Id);
+        item.ConfigureCell(viewModel, viewModel.Id, _textureRequestHandler);
     }
 
     #endregion

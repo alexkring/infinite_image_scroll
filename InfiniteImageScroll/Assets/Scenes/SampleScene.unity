@@ -682,7 +682,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _imageApi: {fileID: 1652416557}
-  _imageLoader: {fileID: 1652416556}
+  _textureLoader: {fileID: 1652416556}
   _scrollController: {fileID: 440737020}
 --- !u!4 &1652416559
 Transform:

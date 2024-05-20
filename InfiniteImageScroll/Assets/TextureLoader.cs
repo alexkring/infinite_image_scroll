@@ -5,9 +5,9 @@ using UnityEngine.Networking;
 using System.Threading.Tasks;
 
 // Loads remote web images into 2d textures in memory.
-public class ImageLoader : MonoBehaviour
+public class TextureLoader : MonoBehaviour
 {
-    public IEnumerator LoadImages(List<ImageModel> modelList, System.Action<List<Texture2D>> callback)
+    public IEnumerator LoadTextures(List<ImageModel> modelList, System.Action<List<Texture2D>> callback)
     {
         List<Texture2D> texturesLoaded = new List<Texture2D>();
         foreach (ImageModel model in modelList) {
@@ -18,7 +18,7 @@ public class ImageLoader : MonoBehaviour
         callback(texturesLoaded);
     }
 
-    private IEnumerator LoadTexture(string url, System.Action<Texture2D> callback) 
+    public IEnumerator LoadTexture(string url, System.Action<Texture2D> callback) 
     {
         using( UnityWebRequest www = UnityWebRequestTexture.GetTexture(url) )
         {

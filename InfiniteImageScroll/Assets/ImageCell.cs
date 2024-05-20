@@ -13,10 +13,13 @@ public class ImageCell : MonoBehaviour, ICell
     public Text idLabel;
     public Text nameLabel;
     public Text urlLabel;
+    public Image image;
 
     // Model
     private ImageViewModel _viewModel;
     private string _modelId;
+    private ITextureRequestHandler _textureRequestHandler;
+    private bool _isLoading = false;
 
     private void Start()
     {
@@ -34,10 +37,11 @@ public class ImageCell : MonoBehaviour, ICell
     }
 
     // This is called from the SetCell method in DataSource
-    public void ConfigureCell(ImageViewModel model, string modelId)
+    public void ConfigureCell(ImageViewModel model, string modelId,  ITextureRequestHandler textureRequestHandler)
     {
         _modelId = modelId;
         _viewModel = model;
+        _textureRequestHandler = textureRequestHandler;
 
         idLabel.text = model.Id;
         nameLabel.text = model.Name;
@@ -46,9 +50,32 @@ public class ImageCell : MonoBehaviour, ICell
         Debug.Log($"Configuring Cell=> modelId : {modelId}, Name : {model.Name}, Url {model.Url}");
     }
 
-    
     private void ButtonListener()
     {
         Debug.Log("modelId : " + _modelId +  ", Name : " + _viewModel.Name  + ", Url : " + _viewModel.Url);
+        
+        // load / unload texture
+        if (!_viewModel.IsLoaded) {
+            Debug.Log("starting to load 1");
+            if (!_isLoading) {
+                _isLoading = true;
+                Debug.Log("starting to load 2");
+                StartCoroutine(LoadTexture());
+            }
+        } else {
+            // TODO: unload texture
+        }
+    }
+
+    private IEnumerator LoadTexture() {
+        Debug.Log("starting to load 3");
+        yield return StartCoroutine(_textureRequestHandler.LoadTexture(_viewModel.Id, _viewModel.Url, (Texture2D texture) => {
+            Debug.Log("starting to load 4");
+            if (texture != null) {
+                Debug.Log($"Successfully loaded texture for modelId={_viewModel.Id}, url={_viewModel.Url}");
+                _viewModel.Load(texture);
+                image.material.SetTexture("_MainTex", texture);
+            }
+        }));
     }
 }

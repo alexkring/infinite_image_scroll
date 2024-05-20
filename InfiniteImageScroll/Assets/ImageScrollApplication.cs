@@ -4,11 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
+public interface ITextureRequestHandler {
+    IEnumerator LoadTexture(string modelId, string url, System.Action<Texture2D> callback);
+}
+
 // Used to initialize the application with the correct state, and to handle any unity event lifecycle management to communicate with other code components.
-public class ImageScrollApplication : MonoBehaviour
+public class ImageScrollApplication : MonoBehaviour, ITextureRequestHandler
 {
     public ImageAPI _imageApi;
-    public ImageLoader _imageLoader;
+    public TextureLoader _textureLoader;
     public ScrollController _scrollController;
     private ImageCache _imageCache;
 
@@ -36,8 +40,20 @@ public class ImageScrollApplication : MonoBehaviour
                     return (xId.CompareTo(yId)); 
                 } 
             );
-            _scrollController.InitViewModels(scrollableList);
+            _scrollController.InitViewModels(scrollableList, this);
         }));
+    }
+
+    public IEnumerator LoadTexture(string modelId, string url, System.Action<Texture2D> callback) {
+        Texture2D result = null;
+        // TODO: check if item exists in cache and return it first, if request is unnecessary.
+        yield return StartCoroutine(_textureLoader.LoadTexture(url, (Texture2D r) => {
+            result = r;
+        }));
+        if (result != null) {
+            _imageCache.AddTexture(modelId, result);
+        }
+        callback(result);
     }
 
     IEnumerator FetchMultiplePageOfImageModels(int startPage, int numPages, System.Action<bool> callback) {
@@ -73,6 +89,8 @@ public class ImageScrollApplication : MonoBehaviour
                 _imageCache.AddViewModel(model.Id, viewModel);
             }
 
+            // Load Textures
+            /*
             List<Texture2D> loadedTextureResults = null;
             yield return StartCoroutine(_imageLoader.LoadImages(fetchedResult, (List<Texture2D> result) => {
                 loadedTextureResults = result;
@@ -102,6 +120,7 @@ public class ImageScrollApplication : MonoBehaviour
                     }
                 }
             }
+            */
         }
     }
 }
